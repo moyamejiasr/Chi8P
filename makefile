@@ -1,6 +1,7 @@
 # Define compiler and flags
 CXX = g++
-CXXFLAGS = -std=c++11 -Wall
+CXXFLAGS = -std=c++11 -Wall -g
+# g for debug
 
 # Define source and object file paths
 SRCDIR = src

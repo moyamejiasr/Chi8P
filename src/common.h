@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <sstream>
+#include <iostream>
 #define _DEBUG
 
 #define CLR_R "\x1b[31m"
@@ -26,7 +27,8 @@
 
 namespace Chi8P {
   class Memory;
-  class VirtualMachine;
+  template <typename Derived>
+  class Instruction;
 }
 
 // Bugfix GCC sstream implementation

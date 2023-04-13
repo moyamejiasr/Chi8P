@@ -2,8 +2,6 @@
 #include <cstddef>
 #include "common.h"
 
-typedef unsigned char OpCode[4];
-
 class Chi8P::Memory {
 private:
   union { // 4096 (4KB)
@@ -28,10 +26,11 @@ public:
   unsigned char* data();
 
   // Memory Ops
+  bool valid(unsigned short);
   unsigned char read(unsigned short);
   void write(unsigned short, unsigned char);
 
-  const OpCode& nextOp();
+  unsigned short step();
 };
 
 static_assert(sizeof(Chi8P::Memory) == 0x1000,

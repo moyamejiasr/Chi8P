@@ -1,15 +1,15 @@
 #include <fstream>
-#include <iostream>
 #include <algorithm>
 #include "memory.h"
+#include "processor.h"
 
 using namespace Chi8P;
 class Emulator {
   Memory memory;
-
 public:
   Emulator(std::string path = "") {
-    if (path.empty()) return;
+    if (path.empty())
+      return;
 
     std::ifstream file(path, std::ios::binary);
     if (!file) {
@@ -23,14 +23,19 @@ public:
   }
 
   void join() {
-
+    // First op jumps to beginning
+    unsigned short opcode = 0x1200;
+    while (opcode != 0) {
+      execute(memory, opcode);
+      opcode = memory.step();
+    }
   }
 };
 
 int main() {
     std::cout << MSG_WELCOME << std::endl;
     COUT(MSG_STARTUP);
-    Emulator emulator("demo/random.ch8");
+    Emulator emulator("/home/ricardo/project/user-chip8/demo/random.ch8");
     COUT(MSG_PROCEED);
     emulator.join();
     return 0;
