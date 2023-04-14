@@ -1,11 +1,13 @@
 #include <fstream>
 #include <algorithm>
+#include "window.h"
 #include "memory.h"
 #include "processor.h"
 
 using namespace Chi8P;
 class Emulator {
   Memory memory;
+  Window window;
   Processor processor;
 public:
   Emulator(std::string path = "") {
@@ -14,8 +16,7 @@ public:
 
     std::ifstream file(path, std::ios::binary);
     if (!file) {
-        CERR(MSG_ERROPEN);
-        exit(1);
+        CERR(MSG_ERROPEN); exit(1);
     }
     // Default-constructed std::istreambuf_iterator<char>.
     // Acts as an end-of-file marker.

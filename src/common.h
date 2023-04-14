@@ -20,18 +20,30 @@
 #define COUT(X) std::cout << "[*] " << STR(X) << std::endl
 #define CERR(X) std::cout << "[!] " << STR(X) << std::endl
 
-#define MSG_WELCOME CLR_G << "Chi8P - Emulator" << CLR_W
+#define WINDOW_SCALE 10
+#define FRAMEBUFFER_WIDTH 64
+#define FRAMEBUFFER_HEIGHT 32
+#define SCREEN_WIDTH (WINDOW_SCALE * FRAMEBUFFER_WIDTH)
+#define SCREEN_HEIGHT (WINDOW_SCALE * FRAMEBUFFER_HEIGHT)
+
+#define MSG_PGTITLE "Chi8P - Emulator"
+#define MSG_WELCOME CLR_G << MSG_PGTITLE << CLR_W
 #define MSG_STARTUP "Initializing..."
 #define MSG_PROCEED "Running main thread..."
 
 #define MSG_DBGEXEC CLR_Y << "Executing operation: " << CLR_W
 
+#define MSG_ERRSDLI CLR_R << "Error: Could not initialize SDL." << CLR_W
+#define MSG_ERRWNDI CLR_R << "Error: Could not create window." << CLR_W
+#define MSG_ERRRNDI CLR_R << "Error: Could not create renderer." << CLR_W
 #define MSG_ERROPEN CLR_R << "Error: Could not read file." << CLR_W
 #define MSG_ERRNOOP CLR_R << "Warning: Operation 0 not supported. Skipped." << CLR_W
+
 namespace Chi8P {
+  class Window;
   class Memory;
   class Processor;
-  typedef void (*Instruction)(Memory&, unsigned short);
+  typedef void (*Instruction)(unsigned short);
 }
 
 // Bugfix GCC sstream implementation

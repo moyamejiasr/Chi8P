@@ -1,7 +1,8 @@
 # Define compiler and flags
 CXX = g++
-CXXFLAGS = -std=c++11 -Wall -g
+CXXFLAGS = -std=c++11 -Wall -g `sdl2-config --cflags`
 # g for debug
+LDFLAGS = `sdl2-config --libs`
 
 # Define source and object file paths
 SRCDIR = src
@@ -22,7 +23,7 @@ EXECUTABLE = chip8
 all: $(BINDIR)/$(EXECUTABLE)
 
 $(BINDIR)/$(EXECUTABLE): $(OBJECTS)
-	$(CXX) $(CXXFLAGS) $^ -o $@
+	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
 
 # Build object files from source files
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp

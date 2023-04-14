@@ -3,11 +3,16 @@
 #include <functional>
 #include "common.h"
 #include "memory.h"
+#include "window.h"
 
 class Chi8P::Processor {
+  Memory* p_Memory;
+  Window* p_Window;
   static std::array<Instruction, 0xF> _OpCodes;
-  static void sys_op(Memory&, unsigned short);
-  static void jmp_op(Memory&, unsigned short);
+
+  static void sys_op(unsigned short);
+  static void jmp_op(unsigned short);
 public:
-  void execute(Memory&, unsigned short);
+  Processor(Memory*, Window*);
+  void execute(unsigned short);
 };

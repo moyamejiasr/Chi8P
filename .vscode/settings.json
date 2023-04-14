@@ -1,5 +1,7 @@
 {
   "editor.tabSize": 2,
+  "C_Cpp.intelliSenseCacheSize": 4096,
+  "editor.quickSuggestionsDelay": 50,
   "files.associations": {
     "array": "cpp",
     "atomic": "cpp",
