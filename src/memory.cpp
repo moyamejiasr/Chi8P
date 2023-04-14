@@ -1,5 +1,9 @@
 #include "memory.h"
 
+Chi8P::Memory::Memory() {
+
+}
+
 unsigned char* Chi8P::Memory::data() {
   return this->ProgramSpace;
 }
@@ -14,6 +18,14 @@ unsigned char Chi8P::Memory::read(unsigned short address) {
 
 void Chi8P::Memory::write(unsigned short address, unsigned char value) {
   this->_Memory[address] = value;
+}
+
+unsigned short Chi8P::Memory::pop() {
+  return this->Stack[StackPointer--];
+}
+
+void Chi8P::Memory::push(unsigned short data) {
+  this->Stack[StackPointer++] = data;
 }
 
 unsigned short Chi8P::Memory::step() {

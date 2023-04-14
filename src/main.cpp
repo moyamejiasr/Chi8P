@@ -10,7 +10,7 @@ class Emulator {
   Window window;
   Processor processor;
 public:
-  Emulator(std::string path = "") {
+  Emulator(std::string path = "") : processor(&memory, &window) {
     if (path.empty())
       return;
 
@@ -28,7 +28,7 @@ public:
     // First op jumps to beginning
     unsigned short opcode = 0x1200;
     while (opcode != 0) {
-      processor.execute(memory, opcode);
+      processor.execute(opcode);
       opcode = memory.step();
     }
   }

@@ -1,26 +1,23 @@
 #include "processor.h"
 
-std::array<Chi8P::Instruction, 0xF> Chi8P::Processor::_OpCodes {
-  sys_op, jmp_op
-};
+Chi8P::Processor::Processor(Memory* memory, Window* wnd) {
+  this->p_Memory = memory; this->p_Window = wnd;
+}
 
 void Chi8P::Processor::sys_op(unsigned short opcode) {
   switch(opcode) {
-    case 0x00E0: // CLS
-
-      break;
-    case 0x00EE: // RET
-      break;
+    case 0x00E0: p_Window->clear(); break;
+    case 0x00EE: p_Memory->jump(p_Memory->pop()); break;
+    default: jmp_op(opcode);
   }
-  COUT(MSG_ERRNOOP);
 }
 
 void Chi8P::Processor::jmp_op(unsigned short opcode) {
-  p_Memory.jump(opcode & 0x0FFF);
+  p_Memory->jump(opcode & 0x0FFF);
 }
 
-void Chi8P::Processor::execute(Memory& memory, unsigned short opcode) {
+void Chi8P::Processor::execute(unsigned short opcode) {
   unsigned char operation = ((opcode >> 8) & 0xFF) >> 4;
   CLOG(MSG_DBGEXEC << static_cast<int>(operation));
-  _OpCodes[operation](memory, opcode);
+  _OpCodes[operation](this, opcode);
 }

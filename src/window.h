@@ -11,4 +11,5 @@ public:
   ~Window();
 
   void clear();
+  void draw(unsigned char*);
 };

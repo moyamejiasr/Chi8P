@@ -8,12 +8,12 @@ Chi8P::Window::Window() {
     SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
     SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN))
   ) {
-    CERR(MSG_ERRWNDI); Window::~Window(); exit(3);
+    CERR(MSG_ERRWNDI); this->~Window(); exit(3);
   }
   if (!(Renderer = SDL_CreateRenderer(_Window, -1,
     SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC))
   ) {
-    CERR(MSG_ERRRNDI); Window::~Window(); exit(4);
+    CERR(MSG_ERRRNDI); this->~Window(); exit(4);
   }
 }
 
@@ -28,4 +28,13 @@ void Chi8P::Window::clear() {
   SDL_SetRenderDrawColor(Renderer, 0, 0, 0, 255);
   SDL_RenderClear(Renderer);
   SDL_RenderPresent(Renderer);
+}
+
+void Chi8P::Window::draw(unsigned char* buffer) {
+  for (unsigned x = 0; x < FRAMEBUFFER_WIDTH; x++) {
+    for (unsigned y = 0; y < FRAMEBUFFER_HEIGHT; y++) {
+      unsigned position = x * y;
+      unsigned pixel = position / 8, offset = position % 8;
+    }
+  }
 }

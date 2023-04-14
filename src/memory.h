@@ -26,7 +26,7 @@ private:
       0xF0, 0x80, 0xF0, 0x80, 0x80  // F
     };
     struct {
-      unsigned char FontSet[0x80];
+      const unsigned char FontSet[0x80];
       unsigned char FrameBuffer[0x100]; // 64*32/8
       unsigned char Reserved[0x60]; // Not used
       unsigned char Stack[8];
@@ -41,6 +41,8 @@ private:
     };
   };
 public:
+  Memory();
+
   // Basic Access Ops
   unsigned char* data();
 
@@ -48,6 +50,10 @@ public:
   bool valid(unsigned short);
   unsigned char read(unsigned short);
   void write(unsigned short, unsigned char);
+
+  // Stack Ops
+  unsigned short pop();
+  void push(unsigned short);
 
   // System Ops
   unsigned short step();
