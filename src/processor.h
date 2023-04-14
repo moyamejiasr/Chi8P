@@ -12,9 +12,18 @@ class Chi8P::Processor {
 
   void sys_op(unsigned short);
   void jmp_op(unsigned short);
+  void cll_op(unsigned short);
+  void sec_op(unsigned short);
+  void snc_op(unsigned short);
+  void ser_op(unsigned short);
+  void ldc_op(unsigned short);
   std::array<Instruction, 0xF> _OpCodes {
-    std::bind(&Processor::sys_op, this, std::placeholders::_2),
-    std::bind(&Processor::jmp_op, this, std::placeholders::_2),
+    // Movement
+    &Processor::sys_op, &Processor::jmp_op, &Processor::cll_op,
+    // Logical
+    &Processor::sec_op, &Processor::snc_op, &Processor::ser_op,
+    // Storage
+    &Processor::ldc_op
   };
 public:
   Processor(Memory*, Window*);

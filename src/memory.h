@@ -55,7 +55,12 @@ public:
   unsigned short pop();
   void push(unsigned short);
 
+  // Register Ops
+  unsigned char getv(unsigned char);
+  void setv(unsigned char, unsigned char);
+
   // System Ops
+  unsigned short pc();
   unsigned short step();
   void jump(unsigned short);
 };

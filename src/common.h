@@ -46,7 +46,7 @@ namespace Chi8P {
   class Window;
   class Memory;
   class Processor;
-  typedef std::function<void(Processor*, unsigned short)> Instruction;
+  typedef void (Processor::*Instruction)(unsigned short);
 }
 
 // Bugfix GCC sstream implementation

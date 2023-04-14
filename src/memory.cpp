@@ -25,14 +25,27 @@ unsigned short Chi8P::Memory::pop() {
 }
 
 void Chi8P::Memory::push(unsigned short data) {
-  this->Stack[StackPointer++] = data;
+  this->Stack[++StackPointer] = data;
+}
+
+unsigned char Chi8P::Memory::getv(unsigned char p) {
+  return this->V[p];
+}
+
+void Chi8P::Memory::setv(unsigned char p, unsigned char value) {
+  this->V[p] = value;
+}
+
+unsigned short Chi8P::Memory::pc() {
+  return this->ProgramCounter;
 }
 
 unsigned short Chi8P::Memory::step() {
   if (!this->valid(ProgramCounter))
     return 0;
-  auto opcode = this->read(ProgramCounter); ProgramCounter += 2;
-  return opcode;
+  return static_cast<unsigned short>(
+    (this->read(ProgramCounter++) << 8) | this->read(ProgramCounter++)
+  );
 }
 
 void Chi8P::Memory::jump(unsigned short address) {
