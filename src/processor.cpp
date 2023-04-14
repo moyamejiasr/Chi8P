@@ -1,21 +1,25 @@
 #include "processor.h"
 
-template <typename Derived>
-std::array<Chi8P::Instruction<Derived>*, 0xF> Chi8P::Instruction<Derived>::_OpCodes;
+std::array<Chi8P::Instruction, 0xF> Chi8P::Processor::_OpCodes {
+  sys_op, jmp_op
+};
 
-void Chi8P::execute(Memory& memory, unsigned short opcode) {
+void Chi8P::Processor::sys_op(Memory& memory, unsigned short opcode) {
+  switch(opcode) {
+    case 0x00E0: // CLS
+      break;
+    case 0x00EE: // RET
+      break;
+  }
+  COUT(MSG_ERRNOOP);
+}
+
+void Chi8P::Processor::jmp_op(Memory& memory, unsigned short opcode) {
+  memory.jump(opcode & 0x0FFF);
+}
+
+void Chi8P::Processor::execute(Memory& memory, unsigned short opcode) {
   unsigned char operation = ((opcode >> 8) & 0xFF) >> 4;
-  auto codes = Instruction<SYInstruction>::_OpCodes;
-  Instruction<SYInstruction>::_OpCodes[operation]->process(memory, opcode);
-}
-
-template class Chi8P::Instruction<Chi8P::SYInstruction>;
-void Chi8P::SYInstruction::process(Memory& memory, unsigned short opcode) {
-  exit(2);
-}
-
-template class Chi8P::Instruction<Chi8P::JPInstruction>;
-void Chi8P::JPInstruction::process(Memory& memory, unsigned short opcode) {
-  unsigned short address = opcode << 4;
-  COUT("Jumping to 0x" << std::hex << address);
+  CLOG(MSG_DBGEXEC << static_cast<int>(operation));
+  _OpCodes[operation](memory, opcode);
 }

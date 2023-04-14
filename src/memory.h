@@ -30,7 +30,9 @@ public:
   unsigned char read(unsigned short);
   void write(unsigned short, unsigned char);
 
+  // System Ops
   unsigned short step();
+  void jump(unsigned short);
 };
 
 static_assert(sizeof(Chi8P::Memory) == 0x1000,

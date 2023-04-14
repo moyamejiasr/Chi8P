@@ -22,3 +22,7 @@ unsigned short Chi8P::Memory::step() {
   auto opcode = this->read(ProgramCounter); ProgramCounter += 2;
   return opcode;
 }
+
+void Chi8P::Memory::jump(unsigned short address) {
+  this->ProgramCounter = address;
+}

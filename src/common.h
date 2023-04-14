@@ -23,16 +23,19 @@
 #define MSG_WELCOME CLR_G << "Chi8P - Emulator" << CLR_W
 #define MSG_STARTUP "Initializing..."
 #define MSG_PROCEED "Running main thread..."
-#define MSG_ERROPEN CLR_R << "Error: Could not read file." << CLR_W
 
+#define MSG_DBGEXEC CLR_Y << "Executing operation: " << CLR_W
+
+#define MSG_ERROPEN CLR_R << "Error: Could not read file." << CLR_W
+#define MSG_ERRNOOP CLR_R << "Warning: Operation 0 not supported. Skipped." << CLR_W
 namespace Chi8P {
   class Memory;
-  template <typename Derived>
-  class Instruction;
+  class Processor;
+  typedef void (*Instruction)(Memory&, unsigned short);
 }
 
 // Bugfix GCC sstream implementation
-// Ref: https://stackoverflow.com/questions/30065080/stdstringstream-and-the-str-method
+// https://stackoverflow.com/questions/30065080/stdstringstream-and-the-str-method
 template<typename Type>
 std::stringstream& operator<<(std::stringstream& ss, const Type& type)
 {

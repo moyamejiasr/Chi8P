@@ -6,6 +6,7 @@
 using namespace Chi8P;
 class Emulator {
   Memory memory;
+  Processor processor;
 public:
   Emulator(std::string path = "") {
     if (path.empty())
@@ -26,7 +27,7 @@ public:
     // First op jumps to beginning
     unsigned short opcode = 0x1200;
     while (opcode != 0) {
-      execute(memory, opcode);
+      processor.execute(memory, opcode);
       opcode = memory.step();
     }
   }
