@@ -53,7 +53,7 @@ public:
 
   // Frame Buffer Ops
   unsigned char* getfb();
-  bool setfb(unsigned short, unsigned char);
+  void setfb(unsigned short, unsigned char);
 
   // Stack Ops
   unsigned short pop();

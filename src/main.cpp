@@ -31,6 +31,8 @@ public:
       processor.execute(opcode);
       opcode = memory.step();
     }
+    CLOG(MSG_DBGEOPG);
+    std::getchar();
   }
 };
 

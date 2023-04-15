@@ -39,8 +39,9 @@ class Chi8P::Processor {
   void rnd_op(unsigned short); // C
   void dsp_op(unsigned short); // D
   void skp_op(unsigned short); // E
+  void ext_op(unsigned short); // F
 
-  const std::array<Instruction, 0xF> _OpCodes {
+  const std::array<Instruction, 16> _OpCodes {
     // Movement
     &Processor::sys_op, &Processor::jpc_op, &Processor::cll_op,
     // Conditional
@@ -61,8 +62,10 @@ class Chi8P::Processor {
     &Processor::rnd_op,
     // Display
     &Processor::dsp_op,
-    // Keyboard Conditionals
-    &Processor::skp_op
+    // Keyboard Condition
+    &Processor::skp_op,
+    // Extended
+    &Processor::ext_op
   };
 public:
   Processor(Memory*, Window*);

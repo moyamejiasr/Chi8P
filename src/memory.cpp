@@ -24,11 +24,12 @@ unsigned char* Chi8P::Memory::getfb() {
   return this->FrameBuffer;
 }
 
-bool Chi8P::Memory::setfb(unsigned short index, unsigned char position) {
+void Chi8P::Memory::setfb(unsigned short index, unsigned char position) {
+  if (this->FrameBuffer[index] & (1 << position)) {
+    V[0xF] = 1; // Set the collision flag
+  }
   // Set based on buffer index and bit position
-  auto byte = this->FrameBuffer[index];
-  this->FrameBuffer[index] = byte ^ (1 << position);
-  return byte & (1 << position) != 0; // XOR collision
+  this->FrameBuffer[index] ^= (1 << position);
 }
 
 unsigned short Chi8P::Memory::pop() {

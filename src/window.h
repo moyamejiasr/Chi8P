@@ -1,6 +1,7 @@
 #pragma once
 #include <SDL.h>
-#include <algorithm>
+#include <cstring>
+#include <unordered_map>
 #include "common.h"
 
 class Chi8P::Window {
@@ -14,5 +15,7 @@ public:
 
   void clear();
   void draw(unsigned char*);
-  bool key_pressed(unsigned char*);
+
+  bool ispressed(unsigned char);
+  unsigned char getchar();
 };

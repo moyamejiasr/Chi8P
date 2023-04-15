@@ -138,12 +138,60 @@ void Chi8P::Processor::dsp_op(unsigned short opcode) {
         // Buffer Index = Starting Index Current Row + Byte Index Within Row
         auto offset = (y + i) * (FRAMEBUFFER_WIDTH / 8) + (x + j) / 8;
         auto bit_pos = 7 - (x + j) % 8;
+        p_Memory->setfb(offset, bit_pos);
       }
     }
   }
+  // 5- Draw the screen
+  p_Window->draw(p_Memory->getfb());
 }
 
 void Chi8P::Processor::skp_op(unsigned short opcode) {
+  auto value = p_Memory->getv(FIRST_L(opcode));
+  switch (SECOND(opcode)) {
+    case 0x9E: {
+      if (p_Window->ispressed(value)) {
+        p_Memory->step();
+      }
+      break;
+    }
+    case 0xA1: {
+      if (!p_Window->ispressed(value)) {
+        p_Memory->step();
+      }
+      break;
+    }
+    default: COUT(MSG_ERRNOOP(opcode));
+  }
+}
+
+void Chi8P::Processor::ext_op(unsigned short opcode) {
+  auto v = FIRST_L(opcode);
+  switch (SECOND(opcode)) {
+    case 0x0A: {
+      p_Memory->setv(v, p_Window->getchar());
+      break;
+    case 0x29: {
+      p_Memory->seti(v * 5); // Length of a sprite in rows
+      break;
+    }
+    case 0x33: {
+      auto I = p_Memory->geti();
+      p_Memory->write(I, p_Memory->getv(v) / 100);
+      p_Memory->write(I + 1, p_Memory->getv(v) % 100 / 10);
+      p_Memory->write(I + 2, p_Memory->getv(v) % 10);
+      break;
+    }
+    case 0x65: {
+      auto I = p_Memory->geti();
+      for (unsigned char i = 0; i <= v; i++) {
+        p_Memory->setv(i, p_Memory->read(I + i));
+      }
+      break;
+    }
+    }
+    default: COUT(MSG_ERRNOOP(opcode));
+  }
 }
 
 void Chi8P::Processor::execute(unsigned short opcode) {

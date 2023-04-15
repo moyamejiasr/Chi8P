@@ -40,7 +40,7 @@ Chi8P::Window::~Window() {
 
 void Chi8P::Window::clear() {
   // https://chat.openai.com/c/774986b3-3aea-4514-9d15-17ea65634536
-  SDL_SetRenderDrawColor(Renderer, 0, 0, 0, 255);
+  SDL_SetRenderDrawColor(Renderer, 0xFF, 0xFF, 0xFF, 255);
 
   SDL_RenderClear(Renderer);
   SDL_RenderPresent(Renderer);
@@ -48,15 +48,52 @@ void Chi8P::Window::clear() {
 
 void Chi8P::Window::draw(unsigned char* buffer) {
   // Copy the buffer from memory
-  std::copy_n(buffer, FRAMEBUFFER_WIDTH * FRAMEBUFFER_HEIGHT, Surface->pixels);
+  SDL_LockSurface(Surface);
+  std::memcpy(Surface->pixels, buffer, FRAMEBUFFER_WIDTH * FRAMEBUFFER_HEIGHT / 8);
+  SDL_UnlockSurface(Surface);
 
   // Draw the Surface to the screen
   // https://stackoverflow.com/questions/55107529/how-to-create-a-1-bit-per-pixel-surface-with-sdl2
   SDL_Texture * screen_texture = SDL_CreateTextureFromSurface(Renderer, Surface);
-  SDL_RenderCopy(Renderer, screen_texture, NULL, NULL);
-
+  
   SDL_RenderClear(Renderer);
+  SDL_RenderCopy(Renderer, screen_texture, NULL, NULL);
   SDL_RenderPresent(Renderer);
 
   SDL_DestroyTexture(screen_texture);
+}
+
+bool Chi8P::Window::ispressed(unsigned char key) {
+  static std::unordered_map<unsigned char, SDL_Scancode> key_map {
+    {0x0, SDL_SCANCODE_0}, {0x1, SDL_SCANCODE_1}, {0x2, SDL_SCANCODE_2},
+    {0x3, SDL_SCANCODE_3}, {0x4, SDL_SCANCODE_4}, {0x5, SDL_SCANCODE_5},
+    {0x6, SDL_SCANCODE_6}, {0x7, SDL_SCANCODE_7}, {0x8, SDL_SCANCODE_8},
+    {0x9, SDL_SCANCODE_9},
+    {0xA, SDL_SCANCODE_A}, {0xB, SDL_SCANCODE_B}, {0xC, SDL_SCANCODE_C},
+    {0xD, SDL_SCANCODE_D}, {0xE, SDL_SCANCODE_E}, {0xF, SDL_SCANCODE_F}
+  };
+  auto state = SDL_GetKeyboardState(nullptr);
+  return state[key_map[key]];
+}
+
+unsigned char Chi8P::Window::getchar() {
+  static std::unordered_map<SDL_Scancode, unsigned char> key_map {
+    {SDL_SCANCODE_0, 0x0}, {SDL_SCANCODE_1, 0x1}, {SDL_SCANCODE_2, 0x2},
+    {SDL_SCANCODE_3, 0x3}, {SDL_SCANCODE_4, 0x4}, {SDL_SCANCODE_5, 0x5},
+    {SDL_SCANCODE_6, 0x6}, {SDL_SCANCODE_7, 0x7}, {SDL_SCANCODE_8, 0x8},
+    {SDL_SCANCODE_9, 0x9},
+    {SDL_SCANCODE_A, 0xA}, {SDL_SCANCODE_B, 0xB}, {SDL_SCANCODE_C, 0xC},
+    {SDL_SCANCODE_D, 0xD}, {SDL_SCANCODE_E, 0xE}, {SDL_SCANCODE_F, 0xF}
+  };
+  SDL_Event event;
+  while (true) {
+    SDL_WaitEvent(&event);
+    if (event.type != SDL_KEYDOWN)
+      continue;
+    // Parse
+    auto it = key_map.find(event.key.keysym.scancode);
+    if (it == key_map.end())
+      continue;
+    return it->second;
+  }
 }
