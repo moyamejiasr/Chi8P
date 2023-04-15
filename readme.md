@@ -12,4 +12,6 @@ Op. Codes
 A LD(I)   Load Index code
 B JP(V)   Jump Plus V0 code
 C RN      Random code
-D 
+D
+E
+F 

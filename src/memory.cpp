@@ -20,6 +20,17 @@ void Chi8P::Memory::write(unsigned short address, unsigned char value) {
   this->_Memory[address] = value;
 }
 
+unsigned char* Chi8P::Memory::getfb() {
+  return this->FrameBuffer;
+}
+
+bool Chi8P::Memory::setfb(unsigned short index, unsigned char position) {
+  // Set based on buffer index and bit position
+  auto byte = this->FrameBuffer[index];
+  this->FrameBuffer[index] = byte ^ (1 << position);
+  return byte & (1 << position) != 0; // XOR collision
+}
+
 unsigned short Chi8P::Memory::pop() {
   return this->Stack[StackPointer--];
 }
@@ -28,11 +39,11 @@ void Chi8P::Memory::push(unsigned short data) {
   this->Stack[++StackPointer] = data;
 }
 
-unsigned char Chi8P::Memory::geti() {
+unsigned short Chi8P::Memory::geti() {
   return this->IndexRegister;
 }
 
-void Chi8P::Memory::seti(unsigned char value) {
+void Chi8P::Memory::seti(unsigned short value) {
   this->IndexRegister = value;
 }
 

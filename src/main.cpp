@@ -37,6 +37,7 @@ public:
 int main() {
     std::cout << MSG_WELCOME << std::endl;
     COUT(MSG_STARTUP);
+    std::srand(std::time(nullptr));
     Emulator emulator("./demo/random.ch8");
     COUT(MSG_PROCEED);
     emulator.join();

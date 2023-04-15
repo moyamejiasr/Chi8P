@@ -23,11 +23,11 @@
 #define COUT(X) std::cout << "[*] " << STR(X) << std::endl
 #define CERR(X) std::cout << "[!] " << STR(X) << std::endl
 
-#define WINDOW_SCALE 10
+#define SCREEN_SCALE 10
 #define FRAMEBUFFER_WIDTH 64
 #define FRAMEBUFFER_HEIGHT 32
-#define SCREEN_WIDTH (WINDOW_SCALE * FRAMEBUFFER_WIDTH)
-#define SCREEN_HEIGHT (WINDOW_SCALE * FRAMEBUFFER_HEIGHT)
+#define SCREEN_WIDTH (FRAMEBUFFER_WIDTH * SCREEN_SCALE)
+#define SCREEN_HEIGHT (FRAMEBUFFER_HEIGHT * SCREEN_SCALE)
 
 #define MSG_PGTITLE     "Chi8P - Emulator"
 #define MSG_WELCOME     CLR_G << MSG_PGTITLE << CLR_W

@@ -36,7 +36,11 @@ class Chi8P::Processor {
   void snr_op(unsigned short); // 9
   void ldi_op(unsigned short); // A
   void jpr_op(unsigned short); // B
-  std::array<Instruction, 0xF> _OpCodes {
+  void rnd_op(unsigned short); // C
+  void dsp_op(unsigned short); // D
+  void skp_op(unsigned short); // E
+
+  const std::array<Instruction, 0xF> _OpCodes {
     // Movement
     &Processor::sys_op, &Processor::jpc_op, &Processor::cll_op,
     // Conditional
@@ -50,7 +54,15 @@ class Chi8P::Processor {
     // Conditional 2
     &Processor::snr_op,
     // Storage 3
-    &Processor::ldi_op
+    &Processor::ldi_op,
+    // Movement 2
+    &Processor::jpr_op,
+    // Random
+    &Processor::rnd_op,
+    // Display
+    &Processor::dsp_op,
+    // Keyboard Conditionals
+    &Processor::skp_op
   };
 public:
   Processor(Memory*, Window*);

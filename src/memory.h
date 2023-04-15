@@ -51,13 +51,17 @@ public:
   unsigned char read(unsigned short);
   void write(unsigned short, unsigned char);
 
+  // Frame Buffer Ops
+  unsigned char* getfb();
+  bool setfb(unsigned short, unsigned char);
+
   // Stack Ops
   unsigned short pop();
   void push(unsigned short);
 
   // Register Ops
-  unsigned char geti();
-  void seti(unsigned char);
+  unsigned short geti();
+  void seti(unsigned short);
   unsigned char getv(unsigned char);
   void setv(unsigned char, unsigned char);
 
