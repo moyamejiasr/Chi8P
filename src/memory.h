@@ -56,6 +56,8 @@ public:
   void push(unsigned short);
 
   // Register Ops
+  unsigned char geti();
+  void seti(unsigned char);
   unsigned char getv(unsigned char);
   void setv(unsigned char, unsigned char);
 

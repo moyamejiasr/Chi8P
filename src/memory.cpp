@@ -28,6 +28,14 @@ void Chi8P::Memory::push(unsigned short data) {
   this->Stack[++StackPointer] = data;
 }
 
+unsigned char Chi8P::Memory::geti() {
+  return this->IndexRegister;
+}
+
+void Chi8P::Memory::seti(unsigned char value) {
+  this->IndexRegister = value;
+}
+
 unsigned char Chi8P::Memory::getv(unsigned char p) {
   return this->V[p];
 }
@@ -43,9 +51,11 @@ unsigned short Chi8P::Memory::pc() {
 unsigned short Chi8P::Memory::step() {
   if (!this->valid(ProgramCounter))
     return 0;
-  return static_cast<unsigned short>(
-    (this->read(ProgramCounter++) << 8) | this->read(ProgramCounter++)
+  unsigned short value = static_cast<unsigned short>(
+    (this->read(ProgramCounter) << 8) | this->read(ProgramCounter + 1)
   );
+  ProgramCounter += 2;
+  return value;
 }
 
 void Chi8P::Memory::jump(unsigned short address) {
