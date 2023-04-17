@@ -39,20 +39,13 @@ Chi8P::Window::~Window() {
   SDL_Quit();
 }
 
-void Chi8P::Window::clear() {
-  // https://chat.openai.com/c/774986b3-3aea-4514-9d15-17ea65634536
-  SDL_SetRenderDrawColor(Renderer, 0xFF, 0xFF, 0xFF, 255);
-
-  SDL_RenderClear(Renderer);
-  SDL_RenderPresent(Renderer);
-}
-
 void Chi8P::Window::draw(unsigned char* buffer) {
   unsigned* texture_buffer;
   int texture_pitch;
   SDL_LockTexture(Texture, NULL, (void**)&texture_buffer, &texture_pitch);
   for (int i = 0; i < FRAMEBUFFER_WIDTH * FRAMEBUFFER_HEIGHT; ++i) {
-    uint8_t pixel = (buffer[i / 8] >> (7 - (i % 8))) & 0x1;
+    // Get the bit to render and then check for the color
+    unsigned char pixel = (buffer[i / 8] >> (7 - (i % 8))) & 0x1;
     texture_buffer[i] = pixel ? 0xFFFFFFFF : 0x00000000;
   }
   SDL_UnlockTexture(Texture);

@@ -1,5 +1,6 @@
 #pragma once
 #include <cstddef>
+#include <cstring>
 #include "common.h"
 
 class Chi8P::Memory {
@@ -52,6 +53,7 @@ public:
   void write(unsigned short, unsigned char);
 
   // Frame Buffer Ops
+  void clearfb();
   unsigned char* getfb();
   void setfb(unsigned char, unsigned char, unsigned char pixel);
 

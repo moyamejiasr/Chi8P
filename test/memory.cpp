@@ -18,13 +18,13 @@ protected:
 };
 
 TEST_F(MemoryTest, FrameBufferCollision) {
-  memory->setfb(0, 0);
+  memory->setfb(0, 0, 1);
   EXPECT_EQ(*memory->getfb(), 0x0001);
   EXPECT_EQ(memory->getv(0xF), 0);
-  memory->setfb(0, 1);
+  memory->setfb(0, 1, 1);
   EXPECT_EQ(*memory->getfb(), 0x0003);
   EXPECT_EQ(memory->getv(0xF), 0);
-  memory->setfb(0, 0);
+  memory->setfb(0, 0, 1);
   EXPECT_EQ(*memory->getfb(), 0x0002);
   EXPECT_EQ(memory->getv(0xF), 1);
 }

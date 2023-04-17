@@ -13,7 +13,6 @@ public:
   Window();
   ~Window();
 
-  void clear();
   void draw(unsigned char*);
 
   bool ispressed(unsigned char);

@@ -6,7 +6,7 @@ Chi8P::Processor::Processor(Memory* memory, Window* wnd) {
 
 void Chi8P::Processor::sys_op(unsigned short opcode) {
   switch(opcode) {
-    case 0x00E0: p_Window->clear(); break;
+    case 0x00E0: p_Memory->clearfb(); break;
     case 0x00EE: p_Memory->jump(p_Memory->pop()); break;
     default: jpc_op(opcode);
   }
@@ -123,10 +123,13 @@ void Chi8P::Processor::dsp_op(unsigned short opcode) {
     auto sprite_row = p_Memory->read(I + row);
 
     for (int col = 0; col < 8; col++) {
+      // Get pixel activation / deactivation
       unsigned char sprite_pixel = (sprite_row >> (7 - col)) & 0x1;
+      // Get pixel position and reset it on overflow
       auto x = (value + col) % FRAMEBUFFER_WIDTH,
         y = (value2 + row) % FRAMEBUFFER_HEIGHT;
       
+      // Convert them to byte_index and bit_offset
       int framebuffer_index = (y * FRAMEBUFFER_WIDTH + x) / 8;
       int bit_position = 7 - (x % 8);
       p_Memory->setfb(framebuffer_index, bit_position, sprite_pixel);
@@ -161,7 +164,7 @@ void Chi8P::Processor::ext_op(unsigned short opcode) {
       break;
     }
     case 0x29: {
-      p_Memory->seti(v * 5); // Length of a sprite in rows
+      p_Memory->seti(p_Memory->getv(v) * 5); // Length of a sprite in rows
       break;
     }
     case 0x33: {

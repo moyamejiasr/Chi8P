@@ -21,6 +21,10 @@ void Chi8P::Memory::write(unsigned short address, unsigned char value) {
   this->_Memory[address] = value;
 }
 
+void Chi8P::Memory::clearfb() {
+  std::memset(this->FrameBuffer, 0, sizeof(this->FrameBuffer));
+}
+
 unsigned char* Chi8P::Memory::getfb() {
   return this->FrameBuffer;
 }
