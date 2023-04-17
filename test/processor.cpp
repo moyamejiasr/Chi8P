@@ -202,3 +202,33 @@ TEST_F(ProcessorTest, Test_snr_op) {
   processor->execute(0x9010);
   EXPECT_EQ(memory->getpc(), 0x0002);
 }
+
+// A
+TEST_F(ProcessorTest, Test_ldi_op) {
+  processor->execute(0xA200);
+  EXPECT_EQ(memory->geti(), 0x0200);
+}
+
+// B
+TEST_F(ProcessorTest, Test_jpr_op) {
+  memory->setv(0, 0x22);
+  processor->execute(0xB200);
+  EXPECT_EQ(memory->getpc(), 0x0222);
+}
+
+// C
+TEST_F(ProcessorTest, Test_rnd_op) {
+  std::srand(0);
+  processor->execute(0xC0FF);
+  EXPECT_EQ(memory->getv(0), 0x67); // From seed 0
+}
+
+//
+// Skipping D for now
+//
+
+//
+// Skipping E for now
+//
+
+// F

@@ -168,6 +168,7 @@ void Chi8P::Processor::ext_op(unsigned short opcode) {
     case 0x0A: {
       p_Memory->setv(v, p_Window->getchar());
       break;
+    }
     case 0x29: {
       p_Memory->seti(v * 5); // Length of a sprite in rows
       break;
@@ -185,7 +186,6 @@ void Chi8P::Processor::ext_op(unsigned short opcode) {
         p_Memory->setv(i, p_Memory->read(I + i));
       }
       break;
-    }
     }
     default: COUT(MSG_ERRNOOP(opcode));
   }

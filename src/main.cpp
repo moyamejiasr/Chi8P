@@ -22,6 +22,7 @@ public:
     // Acts as an end-of-file marker.
     std::copy(std::istreambuf_iterator<char>(file),
       std::istreambuf_iterator<char>(), memory.data());
+    file.close();
   }
 
   void join() {
@@ -40,7 +41,7 @@ int main() {
     std::cout << MSG_WELCOME << std::endl;
     COUT(MSG_STARTUP);
     std::srand(std::time(nullptr));
-    Emulator emulator("./demo/random.ch8");
+    Emulator emulator("./demo/numbers.ch8");
     COUT(MSG_PROCEED);
     emulator.join();
     return 0;
