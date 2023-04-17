@@ -49,9 +49,13 @@
     "typeinfo": "cpp",
     "cinttypes": "cpp",
     "ctime": "cpp",
-    "iomanip": "cpp"
+    "iomanip": "cpp",
+    "cstring": "cpp",
+    "map": "cpp",
+    "set": "cpp"
   },
   "cSpell.words": [
+    "ERRTXDI",
     "SWSURFACE"
   ],
 }

@@ -7,7 +7,7 @@
 class Chi8P::Window {
   SDL_Window *_Window;
   SDL_Renderer* Renderer;
-  SDL_Surface* Surface;
+  SDL_Texture* Texture;
 
 public:
   Window();

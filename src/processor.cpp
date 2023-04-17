@@ -114,33 +114,24 @@ void Chi8P::Processor::rnd_op(unsigned short opcode) {
 }
 
 void Chi8P::Processor::dsp_op(unsigned short opcode) {
-  auto x = p_Memory->getv(FIRST_L(opcode)) % FRAMEBUFFER_WIDTH;
-  auto y = p_Memory->getv(SECOND_H(opcode)) % FRAMEBUFFER_HEIGHT;
+  auto value = p_Memory->getv(FIRST_L(opcode));
+  auto value2 = p_Memory->getv(SECOND_H(opcode));
   auto height = SECOND_L(opcode);
 
-  // 1- Read n-byte-rows from memory starting from I
   auto I = p_Memory->geti();
-  for (int i = 0; i < height; i++) {
-    auto row = p_Memory->read(I + i); // Sprite Row = I Register + iter
-    // 2- Apply row to frame buffer
-    for (int j = 0; j < 8; j++) {
-      // 3- Get bit as pixel
-      uint8_t pixel = row & (0x80 >> j);
-      // 4- Proceed if pixel set
-      if (pixel != 0) {
-        // (YPos + RowIndex) = Current row
-        // (y + i) * (FRAMEBUFFER_WIDTH / 8) = Start of the row in the buffer
-        // (x + j) = Current column
-        // (x + j) / 8 = Byte in the current row that the pixel belongs to
-        // Buffer Index = Starting Index Current Row + Byte Index Within Row
-        auto offset = (y + i) * (FRAMEBUFFER_WIDTH / 8) + (x + j) / 8;
-        auto bit_pos = 7 - (x + j) % 8;
-        p_Memory->setfb(offset, bit_pos);
-      }
+  for (int row = 0; row < height; row++) {
+    auto sprite_row = p_Memory->read(I + row);
+
+    for (int col = 0; col < 8; col++) {
+      unsigned char sprite_pixel = (sprite_row >> (7 - col)) & 0x1;
+      auto x = (value + col) % FRAMEBUFFER_WIDTH,
+        y = (value2 + row) % FRAMEBUFFER_HEIGHT;
+      
+      int framebuffer_index = (y * FRAMEBUFFER_WIDTH + x) / 8;
+      int bit_position = 7 - (x % 8);
+      p_Memory->setfb(framebuffer_index, bit_position, sprite_pixel);
     }
   }
-  // 5- Draw the screen
-  p_Window->draw(p_Memory->getfb());
 }
 
 void Chi8P::Processor::skp_op(unsigned short opcode) {
@@ -192,7 +183,6 @@ void Chi8P::Processor::ext_op(unsigned short opcode) {
 }
 
 void Chi8P::Processor::execute(unsigned short opcode) {
-  unsigned char operation = FIRST_H(opcode);
-  CLOG(MSG_DBGEXEC << static_cast<int>(operation));
-  (this->*_OpCodes[operation])(opcode);
+  CLOG(MSG_DBGEXEC(opcode));
+  (this->*_OpCodes[FIRST_H(opcode)])(opcode);
 }

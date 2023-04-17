@@ -34,13 +34,14 @@
 #define MSG_STARTUP     "Initializing..."
 #define MSG_PROCEED     "Running main thread..."
 
-#define MSG_DBGEXEC     CLR_Y << "Executing operation: " << CLR_W
+#define MSG_DBGEXEC(X)  CLR_Y << "Executing: " << HEX(X) << CLR_W
 #define MSG_DBGEOPG     CLR_B << "End of Program. Press any key to exit" << CLR_W
 
+#define MSG_ERROPEN     CLR_R << "Error: Could not read file." << CLR_W
 #define MSG_ERRSDLI     CLR_R << "Error: Could not initialize SDL." << CLR_W
 #define MSG_ERRWNDI     CLR_R << "Error: Could not create window." << CLR_W
 #define MSG_ERRRNDI     CLR_R << "Error: Could not create renderer." << CLR_W
-#define MSG_ERROPEN     CLR_R << "Error: Could not read file." << CLR_W
+#define MSG_ERRSFDI     CLR_R << "Error: Could not create surface." << CLR_W
 #define MSG_ERRNOOP(X)  CLR_R << "Warning: Operation 0x" << HEX(X) << " not supported. Skipped." << CLR_W
 
 namespace Chi8P {

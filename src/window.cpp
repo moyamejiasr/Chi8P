@@ -11,31 +11,31 @@ Chi8P::Window::Window() {
     CERR(MSG_ERRWNDI); this->~Window(); exit(3);
   }
   if (!(Renderer = SDL_CreateRenderer(_Window, -1,
-    SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED))
+    SDL_RENDERER_ACCELERATED))
   ) {
     CERR(MSG_ERRRNDI); this->~Window(); exit(4);
   }
-
-  // Set render scale to make framebuffer fit the whole screen
-  SDL_RenderSetScale(Renderer, SCREEN_SCALE, SCREEN_SCALE);
-
-  // Limit the window size so that it cannot be smaller
-  // https://stackoverflow.com/questions/55107529/how-to-create-a-1-bit-per-pixel-surface-with-sdl2
-  SDL_SetWindowMinimumSize(_Window, FRAMEBUFFER_WIDTH, FRAMEBUFFER_HEIGHT);
-  SDL_RenderSetLogicalSize(Renderer, FRAMEBUFFER_WIDTH, FRAMEBUFFER_HEIGHT);
-  SDL_RenderSetIntegerScale(Renderer, SDL_TRUE); // Round down to smaller int size
-
   // A one-bit-per-pixel Surface, indexed to these colors
-  Surface = SDL_CreateRGBSurfaceWithFormat(SDL_SWSURFACE,
-    FRAMEBUFFER_WIDTH, FRAMEBUFFER_HEIGHT, 1, SDL_PIXELFORMAT_INDEX1MSB);
-  SDL_Color colors[2] = {{0, 0, 0, 255}, {255, 255, 255, 255}};
-  SDL_SetPaletteColors(Surface->format->palette, colors, 0, 2);
+  if (!(Texture = SDL_CreateTexture(Renderer, SDL_PIXELFORMAT_RGBA8888,
+    SDL_TEXTUREACCESS_STREAMING, FRAMEBUFFER_WIDTH, FRAMEBUFFER_HEIGHT))
+  ) {
+    CERR(MSG_ERRSFDI); this->~Window(); exit(5);
+  }
 }
 
 Chi8P::Window::~Window() {
-  if (Surface) SDL_FreeSurface(Surface);
-  if (Renderer) SDL_DestroyRenderer(Renderer);
-  if (_Window) SDL_DestroyWindow(_Window);
+  if (Texture) {
+    SDL_DestroyTexture(Texture);
+    Texture = nullptr;
+  }
+  if (Renderer) {
+    SDL_DestroyRenderer(Renderer);
+    Renderer = nullptr;
+  }
+  if (_Window) {
+    SDL_DestroyWindow(_Window);
+    _Window = nullptr;
+  }
   SDL_Quit();
 }
 
@@ -48,20 +48,19 @@ void Chi8P::Window::clear() {
 }
 
 void Chi8P::Window::draw(unsigned char* buffer) {
-  // Copy the buffer from memory
-  SDL_LockSurface(Surface);
-  std::memcpy(Surface->pixels, buffer, FRAMEBUFFER_WIDTH * FRAMEBUFFER_HEIGHT / 8);
-  SDL_UnlockSurface(Surface);
+  unsigned* texture_buffer;
+  int texture_pitch;
+  SDL_LockTexture(Texture, NULL, (void**)&texture_buffer, &texture_pitch);
+  for (int i = 0; i < FRAMEBUFFER_WIDTH * FRAMEBUFFER_HEIGHT; ++i) {
+    uint8_t pixel = (buffer[i / 8] >> (7 - (i % 8))) & 0x1;
+    texture_buffer[i] = pixel ? 0xFFFFFFFF : 0x00000000;
+  }
+  SDL_UnlockTexture(Texture);
 
-  // Draw the Surface to the screen
-  // https://stackoverflow.com/questions/55107529/how-to-create-a-1-bit-per-pixel-surface-with-sdl2
-  SDL_Texture * screen_texture = SDL_CreateTextureFromSurface(Renderer, Surface);
-  
+  // Render the texture
   SDL_RenderClear(Renderer);
-  SDL_RenderCopy(Renderer, screen_texture, NULL, NULL);
+  SDL_RenderCopy(Renderer, Texture, NULL, NULL);
   SDL_RenderPresent(Renderer);
-
-  SDL_DestroyTexture(screen_texture);
 }
 
 bool Chi8P::Window::ispressed(unsigned char key) {

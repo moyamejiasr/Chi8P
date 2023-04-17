@@ -30,6 +30,7 @@ public:
     unsigned short opcode = 0x1200;
     while (opcode != 0) {
       processor.execute(opcode);
+      window.draw(memory.getfb());
       opcode = memory.step();
     }
     CLOG(MSG_DBGEOPG);
@@ -41,7 +42,7 @@ int main() {
     std::cout << MSG_WELCOME << std::endl;
     COUT(MSG_STARTUP);
     std::srand(std::time(nullptr));
-    Emulator emulator("./demo/custom.ch8");
+    Emulator emulator("./demo/numbers.ch8");
     COUT(MSG_PROCEED);
     emulator.join();
     return 0;
