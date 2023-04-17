@@ -29,7 +29,7 @@ private:
       const unsigned char FontSet[0x80];
       unsigned char FrameBuffer[0x100]; // 64*32/8
       unsigned char Reserved[0x60]; // Not used
-      unsigned char Stack[8];
+      unsigned short Stack[4];
       unsigned char V[16];
       unsigned char DelayTimer;
       unsigned char SoundTimer;

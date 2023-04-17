@@ -1,7 +1,8 @@
 #include "memory.h"
 
 Chi8P::Memory::Memory() {
-
+  // Start before 0 so we begin pushing to 0
+  StackPointer = -1;
 }
 
 unsigned char* Chi8P::Memory::data() {
