@@ -116,7 +116,7 @@ void Chi8P::Processor::rnd_op(unsigned short opcode) {
 void Chi8P::Processor::dsp_op(unsigned short opcode) {
   auto x = p_Memory->getv(FIRST_L(opcode)) % FRAMEBUFFER_WIDTH;
   auto y = p_Memory->getv(SECOND_H(opcode)) % FRAMEBUFFER_HEIGHT;
-  auto height = p_Memory->getv(SECOND_L(opcode));
+  auto height = SECOND_L(opcode);
 
   // 1- Read n-byte-rows from memory starting from I
   auto I = p_Memory->geti();

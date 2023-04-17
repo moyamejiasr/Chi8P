@@ -10,7 +10,8 @@ Chi8P::Window::Window() {
   ) {
     CERR(MSG_ERRWNDI); this->~Window(); exit(3);
   }
-  if (!(Renderer = SDL_CreateRenderer(_Window, -1, SDL_RENDERER_PRESENTVSYNC))
+  if (!(Renderer = SDL_CreateRenderer(_Window, -1,
+    SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED))
   ) {
     CERR(MSG_ERRRNDI); this->~Window(); exit(4);
   }

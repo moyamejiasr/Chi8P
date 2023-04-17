@@ -41,7 +41,7 @@ int main() {
     std::cout << MSG_WELCOME << std::endl;
     COUT(MSG_STARTUP);
     std::srand(std::time(nullptr));
-    Emulator emulator("./demo/numbers.ch8");
+    Emulator emulator("./demo/custom.ch8");
     COUT(MSG_PROCEED);
     emulator.join();
     return 0;
