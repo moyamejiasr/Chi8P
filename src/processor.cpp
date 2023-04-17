@@ -17,7 +17,7 @@ void Chi8P::Processor::jpc_op(unsigned short opcode) {
 }
 
 void Chi8P::Processor::cll_op(unsigned short opcode) {
-  p_Memory->push(p_Memory->pc());
+  p_Memory->push(p_Memory->getpc());
   jpc_op(opcode);
 }
 

@@ -53,7 +53,7 @@ public:
 
   // Frame Buffer Ops
   unsigned char* getfb();
-  void setfb(unsigned short, unsigned char);
+  void setfb(unsigned char, unsigned char);
 
   // Stack Ops
   unsigned short pop();
@@ -66,7 +66,7 @@ public:
   void setv(unsigned char, unsigned char);
 
   // System Ops
-  unsigned short pc();
+  unsigned short getpc();
   unsigned short step();
   void jump(unsigned short);
 };

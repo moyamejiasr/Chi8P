@@ -25,7 +25,7 @@ unsigned char* Chi8P::Memory::getfb() {
   return this->FrameBuffer;
 }
 
-void Chi8P::Memory::setfb(unsigned short index, unsigned char position) {
+void Chi8P::Memory::setfb(unsigned char index, unsigned char position) {
   if (this->FrameBuffer[index] & (1 << position)) {
     V[0xF] = 1; // Set the collision flag
   }
@@ -57,7 +57,7 @@ void Chi8P::Memory::setv(unsigned char p, unsigned char value) {
   this->V[p] = value;
 }
 
-unsigned short Chi8P::Memory::pc() {
+unsigned short Chi8P::Memory::getpc() {
   return this->ProgramCounter;
 }
 

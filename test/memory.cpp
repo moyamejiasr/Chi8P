@@ -17,6 +17,18 @@ protected:
   Memory* memory;
 };
 
+TEST_F(MemoryTest, FrameBufferCollision) {
+  memory->setfb(0, 0);
+  EXPECT_EQ(*memory->getfb(), 0x0001);
+  EXPECT_EQ(memory->getv(0xF), 0);
+  memory->setfb(0, 1);
+  EXPECT_EQ(*memory->getfb(), 0x0003);
+  EXPECT_EQ(memory->getv(0xF), 0);
+  memory->setfb(0, 0);
+  EXPECT_EQ(*memory->getfb(), 0x0002);
+  EXPECT_EQ(memory->getv(0xF), 1);
+}
+
 TEST_F(MemoryTest, StackPushPop) {
   memory->push(0x0123);
   memory->push(0x4567);
