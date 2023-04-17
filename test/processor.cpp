@@ -97,3 +97,108 @@ TEST_F(ProcessorTest, Test_adc_op) {
   processor->execute(0x7012);
   EXPECT_EQ(memory->getv(0), 0x0013);
 }
+
+// 8
+TEST_F(ProcessorTest, Test_ldr_op) {
+  // 0
+  memory->setv(1, 0x0001);
+  processor->execute(0x8010);
+  EXPECT_EQ(memory->getv(0), 0x0001);
+
+  // 1
+  memory->setv(1, 0x0002);
+  processor->execute(0x8011);
+  EXPECT_EQ(memory->getv(0), 0x0003);
+
+  // 2
+  memory->setv(0, 0x0001);
+  processor->execute(0x8012);
+  EXPECT_EQ(memory->getv(0), 0x0000);
+
+  // 3
+  memory->setv(0, 0x0002);
+  memory->setv(1, 0x0003);
+  processor->execute(0x8013);
+  EXPECT_EQ(memory->getv(0), 0x0001);
+
+  // 4
+  memory->setv(0xF, 0x0000);
+  memory->setv(0, 0x0001);
+  memory->setv(1, 0x0003);
+  processor->execute(0x8014);
+  EXPECT_EQ(memory->getv(0), 0x0004);
+  EXPECT_EQ(memory->getv(0xF), 0x0000);
+  /* Overflow */
+  memory->setv(0xF, 0x0000);
+  memory->setv(0, 0x00FF);
+  memory->setv(1, 0x0001);
+  processor->execute(0x8014);
+  EXPECT_EQ(memory->getv(0xF), 0x0001);
+
+  // 5
+  memory->setv(0xF, 0x0000);
+  memory->setv(0, 0x0003);
+  memory->setv(1, 0x0002);
+  processor->execute(0x8015);
+  EXPECT_EQ(memory->getv(0), 0x0001);
+  EXPECT_EQ(memory->getv(0xF), 0x0001);
+  /* Borrow */
+  memory->setv(0xF, 0x0000);
+  memory->setv(0, 0x0002);
+  memory->setv(1, 0x0003);
+  processor->execute(0x8015);
+  EXPECT_EQ(memory->getv(0xF), 0x0000);
+
+  // 6
+  memory->setv(0xF, 0x0000);
+  memory->setv(0, 0x0004);
+  processor->execute(0x8006);
+  EXPECT_EQ(memory->getv(0), 0x0002);
+  EXPECT_EQ(memory->getv(0xF), 0x0000);
+  /* Not exact */
+  memory->setv(0xF, 0x0000);
+  memory->setv(0, 0x0005);
+  processor->execute(0x8006);
+  EXPECT_EQ(memory->getv(0), 0x0002);
+  EXPECT_EQ(memory->getv(0xF), 0x0001);
+
+  // 7
+  memory->setv(0xF, 0x0000);
+  memory->setv(0, 0x0002);
+  memory->setv(1, 0x0003);
+  processor->execute(0x8017);
+  EXPECT_EQ(memory->getv(0), 0x0001);
+  EXPECT_EQ(memory->getv(0xF), 0x0001);
+  /* Borrow */
+  memory->setv(0xF, 0x0000);
+  memory->setv(0, 0x0003);
+  memory->setv(1, 0x0002);
+  processor->execute(0x8017);
+  EXPECT_EQ(memory->getv(0xF), 0x0000);
+
+  // E
+  memory->setv(0xF, 0x0000);
+  memory->setv(0, 0x0004);
+  processor->execute(0x800E);
+  EXPECT_EQ(memory->getv(0), 0x0008);
+  EXPECT_EQ(memory->getv(0xF), 0x0000);
+  /* Not exact */
+  memory->setv(0xF, 0x0000);
+  memory->setv(0, 0x0084);
+  processor->execute(0x800E);
+  EXPECT_EQ(memory->getv(0), 0x0008);
+  EXPECT_EQ(memory->getv(0xF), 0x0001);
+}
+
+// 9
+TEST_F(ProcessorTest, Test_snr_op) {
+  memory->setv(0, 0x12);
+  memory->setv(1, 0x12);
+  processor->execute(0x9010);
+  EXPECT_EQ(memory->getpc(), 0x0000);
+
+  memory->setv(0, 0x11);
+  memory->setv(1, 0x12);
+  processor->execute(0x9010);
+  EXPECT_EQ(memory->getpc(), 0x0002);
+}

@@ -61,6 +61,7 @@ void Chi8P::Processor::ldr_op(unsigned short opcode) {
     case 0x2: p_Memory->setv(FIRST_L(opcode), value & value2); break;
     case 0x3: p_Memory->setv(FIRST_L(opcode), value ^ value2); break;
     case 0x4: {
+      // Only way I can check for overflow
       unsigned short result = static_cast<unsigned short>(value)
         + static_cast<unsigned short>(value2);
       p_Memory->setv(0xF, (result & 0xFF00) != 0);
@@ -68,10 +69,8 @@ void Chi8P::Processor::ldr_op(unsigned short opcode) {
       break;
     }
     case 0x5: {
-      short result = static_cast<short>(value)
-        - static_cast<short>(value2);
-      p_Memory->setv(0xF, !(result < 0));
-      p_Memory->setv(FIRST_L(opcode), result);
+      p_Memory->setv(0xF, !(value2 > value));
+      p_Memory->setv(FIRST_L(opcode), value - value2);
       break;
     }
     case 0x6: {
@@ -80,14 +79,12 @@ void Chi8P::Processor::ldr_op(unsigned short opcode) {
       break;
     }
     case 0x7: {
-      short result = static_cast<short>(value2)
-        - static_cast<short>(value);
-      p_Memory->setv(0xF, !(result < 0));
-      p_Memory->setv(FIRST_L(opcode), result);
+      p_Memory->setv(0xF, !(value > value2));
+      p_Memory->setv(FIRST_L(opcode), value2 - value);
       break;
     }
     case 0xE: {
-      p_Memory->setv(0xF, value & 0x80); // 1000 0000
+      p_Memory->setv(0xF, (value & 0x80) != 0); // 1000 0000
       p_Memory->setv(FIRST_L(opcode), value << 1);
       break;
     }
