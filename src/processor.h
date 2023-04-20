@@ -21,8 +21,8 @@ using namespace std::placeholders;
 #define V_ADDRESS(X) (X & 0x0FFF)
 
 class Chi8P::Processor {
-  Memory* p_Memory;
-  Window* p_Window;
+  Memory* memory;
+  Window* window;
 
   void sys_op(unsigned short); // 0
   void jpc_op(unsigned short); // 1
