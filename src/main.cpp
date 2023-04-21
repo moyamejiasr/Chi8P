@@ -1,22 +1,28 @@
+// Copyright 2023 Ricardo Moya Mejias
 #include <fstream>
 #include <algorithm>
-#include "window.h"
-#include "memory.h"
-#include "processor.h"
+#include "./window.h"
+#include "./memory.h"
+#include "./processor.h"
 
-using namespace Chi8P;
+using Chi8P::Memory;
+using Chi8P::Window;
+using Chi8P::Processor;
+
 class Emulator {
   Memory memory;
   Window window;
   Processor processor;
-public:
-  Emulator(std::string path = "") : processor(&memory, &window) {
-    if (path.empty())
-      return;
+
+ public:
+  explicit Emulator(const std::string& path = "")
+    : processor(&memory, &window) {
+    if (path.empty()) return;
 
     std::ifstream file(path, std::ios::binary);
     if (!file) {
-        CERR(MSG_ERROPEN); exit(1);
+      CERR(MSG_ERROPEN);
+      exit(1);
     }
     // Default-constructed std::istreambuf_iterator<char>.
     // Acts as an end-of-file marker.
@@ -27,7 +33,7 @@ public:
 
   void join() {
     // First op jumps to beginning
-    unsigned short opcode = 0x1200;
+    uint16_t opcode = 0x1200;
     while (opcode != 0) {
       processor.execute(opcode);
       window.draw(memory.getfb());

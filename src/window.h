@@ -1,20 +1,21 @@
+// Copyright 2023 Ricardo Moya Mejias
 #pragma once
 #include <SDL.h>
 #include <cstring>
 #include <unordered_map>
-#include "common.h"
+#include "./common.h"
 
 class Chi8P::Window {
-  SDL_Window *_Window;
-  SDL_Renderer* Renderer;
-  SDL_Texture* Texture;
+  SDL_Window *sdl_window_ptr;
+  SDL_Renderer* sdl_renderer_ptr;
+  SDL_Texture* sdl_texture_ptr;
 
-public:
+ public:
   Window();
   ~Window();
 
-  void draw(unsigned char*);
+  void draw(uint8_t*);
 
-  bool ispressed(unsigned char);
-  unsigned char getchar();
+  bool ispressed(uint8_t);
+  uint8_t getchar();
 };

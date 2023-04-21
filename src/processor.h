@@ -1,10 +1,10 @@
+// Copyright 2023 Ricardo Moya Mejias
 #pragma once
 #include <array>
 #include <functional>
-#include "common.h"
-#include "memory.h"
-#include "window.h"
-using namespace std::placeholders;
+#include "./common.h"
+#include "./memory.h"
+#include "./window.h"
 
 // Logical bitshift operations
 // -------------------------
@@ -21,25 +21,25 @@ using namespace std::placeholders;
 #define V_ADDRESS(X) (X & 0x0FFF)
 
 class Chi8P::Processor {
-  Memory* memory;
-  Window* window;
+  Memory* memory_ptr;
+  Window* window_ptr;
 
-  void sys_op(unsigned short); // 0
-  void jpc_op(unsigned short); // 1
-  void cll_op(unsigned short); // 2
-  void sec_op(unsigned short); // 3
-  void snc_op(unsigned short); // 4
-  void ser_op(unsigned short); // 5
-  void ldc_op(unsigned short); // 6
-  void adc_op(unsigned short); // 7
-  void ldr_op(unsigned short); // 8
-  void snr_op(unsigned short); // 9
-  void ldi_op(unsigned short); // A
-  void jpr_op(unsigned short); // B
-  void rnd_op(unsigned short); // C
-  void dsp_op(unsigned short); // D
-  void skp_op(unsigned short); // E
-  void ext_op(unsigned short); // F
+  void sys_op(uint16_t);  // 0
+  void jpc_op(uint16_t);  // 1
+  void cll_op(uint16_t);  // 2
+  void sec_op(uint16_t);  // 3
+  void snc_op(uint16_t);  // 4
+  void ser_op(uint16_t);  // 5
+  void ldc_op(uint16_t);  // 6
+  void adc_op(uint16_t);  // 7
+  void ldr_op(uint16_t);  // 8
+  void snr_op(uint16_t);  // 9
+  void ldi_op(uint16_t);  // A
+  void jpr_op(uint16_t);  // B
+  void rnd_op(uint16_t);  // C
+  void dsp_op(uint16_t);  // D
+  void skp_op(uint16_t);  // E
+  void ext_op(uint16_t);  // F
 
   const std::array<Instruction, 16> _OpCodes {
     // Movement
@@ -67,7 +67,8 @@ class Chi8P::Processor {
     // Extended
     &Processor::ext_op
   };
-public:
+
+ public:
   Processor(Memory*, Window*);
-  void execute(unsigned short);
+  void execute(uint16_t);
 };
